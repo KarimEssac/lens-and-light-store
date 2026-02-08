@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
+import { useWishlist } from '@/hooks/useWishlist';
 
 interface ProductInfoProps {
   product: Product;
@@ -11,12 +12,22 @@ interface ProductInfoProps {
 export default function ProductInfo({ product }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [showSuccess, setShowSuccess] = useState(false);
+  const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+  const handleWishlistToggle = () => {
+    if (inWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   const renderStars = (rating: number) => {
@@ -161,9 +172,17 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           Add to Cart - ${(product.price * quantity).toLocaleString('en-US', { minimumFractionDigits: 2 })}
         </button>
 
-        <button className="w-full border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-2">
-          <span className="material-symbols-outlined">favorite_border</span>
-          Add to Wishlist
+        <button 
+          onClick={handleWishlistToggle}
+          className="w-full border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+        >
+          <span 
+            className={`material-symbols-outlined ${inWishlist ? 'text-red-500' : ''}`}
+            style={{ fontVariationSettings: inWishlist ? '"FILL" 1' : '"FILL" 0' }}
+          >
+            favorite
+          </span>
+          {inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
         </button>
       </div>
 

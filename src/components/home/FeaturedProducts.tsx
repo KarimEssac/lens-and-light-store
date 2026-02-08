@@ -1,6 +1,7 @@
 'use client'
 import { getFeaturedProducts } from '@/lib/products';
 import ProductCard from '@/components/product/ProductCard';
+import Link from 'next/link';
 
 export default function FeaturedProducts() {
   const products = getFeaturedProducts();
@@ -14,19 +15,19 @@ export default function FeaturedProducts() {
           </h3>
           <p className="text-gray-500">Handpicked essentials for every photographer</p>
         </div>
-        <a
+        <Link
           href="/catalog"
-          className="text-sm font-bold text-primary hover:underline hidden md:block"
+          className="text-sm font-bold text-primary hover:underline"
         >
           View All →
-        </a>
+        </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </section>
   );
-}
+} 

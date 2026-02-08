@@ -7,7 +7,7 @@ interface FilterSidebarProps {
   onBrandChange: (brand: string) => void;
   onPriceChange: (range: string) => void;
   onClearFilters: () => void;
-  allProducts: Product[]; // Add this to calculate counts
+  allProducts: Product[];
 }
 
 export default function FilterSidebar({ 
@@ -18,7 +18,6 @@ export default function FilterSidebar({
   onClearFilters,
   allProducts
 }: FilterSidebarProps) {
-  // Dynamic brand counts
   const brandCounts = allProducts.reduce((acc, product) => {
     acc[product.brand] = (acc[product.brand] || 0) + 1;
     return acc;

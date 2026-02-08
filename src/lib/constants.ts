@@ -11,10 +11,10 @@ export const NAV_LINKS = [
 
 export const FOOTER_LINKS = {
   shopGear: [
-    { label: 'Mirrorless Cameras', href: '/catalog?type=mirrorless' },
-    { label: 'DSLR Cameras', href: '/catalog?type=dslr' },
-    { label: 'Cinema Lenses', href: '/catalog?type=cinema-lenses' },
-    { label: 'Tripods & Support', href: '/catalog?category=accessories' },
+    { label: 'Cameras', href: '/catalog?category=cameras' },
+    { label: 'Lenses', href: '/catalog?category=lenses' },
+    { label: 'Lighting', href: '/catalog?category=lighting' },
+    { label: 'Accessories', href: '/catalog?category=accessories' },
   ],
   support: [
     { label: 'Help Center', href: '/support' },
@@ -81,4 +81,4 @@ export const CATEGORIES = [
 
 export const TAX_RATE = 0.085;
 export const FREE_SHIPPING_THRESHOLD = 499;
-export const SHIPPING_COST = 0; 
+export const SHIPPING_COST = 0;

@@ -3,9 +3,12 @@
 import Link from 'next/link';
 import { NAV_LINKS } from '@/lib/constants';
 import { useCart } from '@/hooks/useCart';
+import { useWishlist } from '@/hooks/useWishlist';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const { totalItems } = useCart();
+  const { totalItems: wishlistCount } = useWishlist();
 
   return (
     <header className="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800">
@@ -45,11 +48,18 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-4">
+          <ThemeToggle />
+
           <Link
-            href="/account"
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+            href="/wishlist"
+            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors relative"
           >
-            <span className="material-symbols-outlined">person</span>
+            <span className="material-symbols-outlined">favorite</span>
+            {wishlistCount > 0 && (
+              <span className="absolute top-1 right-1 bg-primary text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
           </Link>
           
           <Link
