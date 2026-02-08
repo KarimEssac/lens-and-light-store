@@ -21,7 +21,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const showToast = useCallback((message: string, type: ToastType, productName?: string) => {
-    const id = Date.now();
+    const id = Date.now() + Math.random();
     setToasts(prev => [...prev, { id, message, type, productName }]);
 
     setTimeout(() => {
@@ -37,25 +37,25 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     switch (type) {
       case 'cart':
         return {
-          bg: 'bg-blue-50 dark:bg-blue-900/95',
-          border: 'border-blue-500',
-          iconBg: 'bg-blue-500',
-          textTitle: 'text-blue-900 dark:text-blue-100',
-          textDesc: 'text-blue-800 dark:text-blue-200',
+          bg: 'bg-blue-100 dark:bg-teal-900/30',
+          border: 'border-blue-500 dark:border-teal-500',
+          iconBg: 'bg-blue-500 dark:bg-teal-600',
+          textTitle: 'text-blue-900 dark:text-teal-100',
+          textDesc: 'text-blue-800 dark:text-teal-200',
           icon: 'shopping_cart',
         };
       case 'wishlist':
         return {
-          bg: 'bg-pink-50 dark:bg-pink-900/95',
-          border: 'border-pink-500',
-          iconBg: 'bg-pink-500',
-          textTitle: 'text-pink-900 dark:text-pink-100',
-          textDesc: 'text-pink-800 dark:text-pink-200',
+          bg: 'bg-purple-100 dark:bg-purple-900',
+          border: 'border-purple-500',
+          iconBg: 'bg-purple-500',
+          textTitle: 'text-purple-900 dark:text-purple-100',
+          textDesc: 'text-purple-800 dark:text-purple-200',
           icon: 'favorite',
         };
       case 'success':
         return {
-          bg: 'bg-green-50 dark:bg-green-900/95',
+          bg: 'bg-green-100 dark:bg-green-900',
           border: 'border-green-500',
           iconBg: 'bg-green-500',
           textTitle: 'text-green-900 dark:text-green-100',
@@ -64,7 +64,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         };
       case 'error':
         return {
-          bg: 'bg-red-50 dark:bg-red-900/95',
+          bg: 'bg-red-100 dark:bg-red-900',
           border: 'border-red-500',
           iconBg: 'bg-red-500',
           textTitle: 'text-red-900 dark:text-red-100',
@@ -73,11 +73,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         };
       default:
         return {
-          bg: 'bg-slate-50 dark:bg-slate-900/95',
-          border: 'border-slate-500',
-          iconBg: 'bg-slate-500',
-          textTitle: 'text-slate-900 dark:text-slate-100',
-          textDesc: 'text-slate-800 dark:text-slate-200',
+          bg: 'bg-gray-100 dark:bg-gray-800',
+          border: 'border-gray-500',
+          iconBg: 'bg-gray-500',
+          textTitle: 'text-gray-900 dark:text-gray-100',
+          textDesc: 'text-gray-800 dark:text-gray-200',
           icon: 'info',
         };
     }
@@ -86,27 +86,26 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      
-      <div className="fixed top-6 right-6 z-[9999] space-y-3 pointer-events-none">
+      <div style={{ position: 'fixed', top: '16px', right: '16px', zIndex: 9999 }} className="space-y-2 md:space-y-3">
         {toasts.map((toast) => {
           const styles = getToastStyles(toast.type);
           return (
             <div
               key={toast.id}
-              className={`${styles.bg} border-l-4 ${styles.border} p-4 rounded-lg shadow-2xl min-w-[350px] backdrop-blur-sm animate-slide-in-right pointer-events-auto`}
+              className={`${styles.bg} border-l-4 ${styles.border} p-3 md:p-4 rounded-lg shadow-2xl backdrop-blur-sm animate-slide-in-right w-[280px] md:min-w-[350px] md:max-w-[400px]`}
             >
-              <div className="flex items-start gap-3">
-                <div className={`${styles.iconBg} rounded-full p-2 animate-scale-in`}>
-                  <span className="material-symbols-outlined text-white text-xl">
+              <div className="flex items-start gap-2 md:gap-3">
+                <div className={`${styles.iconBg} rounded-full p-1.5 md:p-2 animate-scale-in`}>
+                  <span className="material-symbols-outlined text-white text-lg md:text-xl">
                     {styles.icon}
                   </span>
                 </div>
                 <div className="flex-1">
-                  <h4 className={`font-bold ${styles.textTitle} text-base mb-1`}>
+                  <h4 className={`font-bold ${styles.textTitle} text-sm md:text-base mb-1`}>
                     {toast.message}
                   </h4>
                   {toast.productName && (
-                    <p className={`text-sm ${styles.textDesc}`}>
+                    <p className={`text-xs md:text-sm ${styles.textDesc}`}>
                       {toast.productName}
                     </p>
                   )}
@@ -115,7 +114,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   onClick={() => removeToast(toast.id)}
                   className={`${styles.textTitle} hover:opacity-70 transition-opacity`}
                 >
-                  <span className="material-symbols-outlined text-lg">close</span>
+                  <span className="material-symbols-outlined text-base md:text-lg">close</span>
                 </button>
               </div>
             </div>

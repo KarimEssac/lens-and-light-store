@@ -16,48 +16,66 @@ interface WishlistContextType {
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<Product[]>([]);
-  const [removedItems, setRemovedItems] = useState<string[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
+  const [items, setItems] = useState<Product[]>(() => {
+    if (typeof window === 'undefined') return [];
+    
     const savedWishlist = localStorage.getItem('wishlist');
-    if (savedWishlist) {
-      try {
-        const parsedWishlist: Product[] = JSON.parse(savedWishlist);
-        
-        const validatedWishlist: Product[] = [];
-        const removed: string[] = [];
+    if (!savedWishlist) return [];
+    
+    try {
+      const parsedWishlist: Product[] = JSON.parse(savedWishlist);
+      
+      const validatedWishlist: Product[] = [];
 
-        parsedWishlist.forEach((savedProduct) => {
-          const currentProduct = getProductById(savedProduct.id);
-          
-          if (currentProduct && currentProduct.inStock && currentProduct.quantity > 0) {
-            validatedWishlist.push(currentProduct);
-          } else {
-            removed.push(savedProduct.name);
-          }
-        });
-
-        setItems(validatedWishlist);
+      parsedWishlist.forEach((savedProduct) => {
+        const currentProduct = getProductById(savedProduct.id);
         
-        if (removed.length > 0) {
-          setRemovedItems(removed);
-          setTimeout(() => setRemovedItems([]), 5000);
+        if (currentProduct && currentProduct.inStock && currentProduct.quantity > 0) {
+          validatedWishlist.push(currentProduct);
         }
-      } catch (error) {
-        console.error('Error loading wishlist:', error);
-        setItems([]);
-      }
+      });
+
+      return validatedWishlist;
+    } catch (error) {
+      console.error('Error loading wishlist:', error);
+      return [];
     }
-    setIsInitialized(true);
-  }, []);
+  });
+
+  const [removedItems, setRemovedItems] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    
+    const savedWishlist = localStorage.getItem('wishlist');
+    if (!savedWishlist) return [];
+    
+    try {
+      const parsedWishlist: Product[] = JSON.parse(savedWishlist);
+      const removed: string[] = [];
+
+      parsedWishlist.forEach((savedProduct) => {
+        const currentProduct = getProductById(savedProduct.id);
+        
+        if (!currentProduct || !currentProduct.inStock || currentProduct.quantity <= 0) {
+          removed.push(savedProduct.name);
+        }
+      });
+
+      return removed;
+    } catch {
+      return [];
+    }
+  });
 
   useEffect(() => {
-    if (isInitialized) {
-      localStorage.setItem('wishlist', JSON.stringify(items));
+    if (removedItems.length > 0) {
+      const timer = setTimeout(() => setRemovedItems([]), 5000);
+      return () => clearTimeout(timer);
     }
-  }, [items, isInitialized]);
+  }, [removedItems.length]);
+
+  useEffect(() => {
+    localStorage.setItem('wishlist', JSON.stringify(items));
+  }, [items]);
 
   const addToWishlist = (product: Product) => {
     const currentProduct = getProductById(product.id);

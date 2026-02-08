@@ -2,6 +2,7 @@
 
 import { CartItem as CartItemType } from '@/types';
 import { useCart } from '@/hooks/useCart';
+import { useToast } from '@/hooks/useToast';
 
 interface CartItemProps {
   item: CartItemType;
@@ -9,6 +10,12 @@ interface CartItemProps {
 
 export default function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeFromCart } = useCart();
+  const { showToast } = useToast();
+
+  const handleRemove = () => {
+    removeFromCart(item.product.id);
+    showToast('Removed from Cart', 'error', item.product.name);
+  };
 
   return (
     <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-secondary-accent/20 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-6">
@@ -56,7 +63,7 @@ export default function CartItem({ item }: CartItemProps) {
           </div>
 
           <button 
-            onClick={() => removeFromCart(item.product.id)}
+            onClick={handleRemove}
             className="flex items-center gap-1.5 text-xs font-bold text-secondary-accent hover:text-red-500 transition-colors uppercase tracking-wider"
           >
             <span className="material-symbols-outlined text-lg">delete</span>

@@ -82,17 +82,17 @@ export default function CatalogPage() {
       <Breadcrumbs items={breadcrumbs} />
 
       <div className="mb-6">
-        <div className="flex items-baseline justify-between gap-4">
-          <div className="flex items-baseline gap-4">
-            <h2 className="text-4xl font-black text-slate-900 dark:text-white">
+        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
               {getPageTitle()}
             </h2>
-            <span className="text-lg text-slate-400 font-medium">{filteredProducts.length} items</span>
+            <span className="text-base sm:text-lg text-slate-400 font-medium">{filteredProducts.length} items</span>
           </div>
 
           <button
             onClick={() => setIsFilterModalOpen(true)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors relative"
+            className="lg:hidden flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors relative w-full sm:w-auto"
           >
             <span className="material-symbols-outlined text-primary">tune</span>
             Filters

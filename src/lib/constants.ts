@@ -6,7 +6,6 @@ export const NAV_LINKS = [
   { label: 'Lenses', href: '/catalog?category=lenses' },
   { label: 'Lighting', href: '/catalog?category=lighting' },
   { label: 'Accessories', href: '/catalog?category=accessories' },
-  { label: 'Deals', href: '/catalog?deals=true' },
 ];
 
 export const FOOTER_LINKS = {

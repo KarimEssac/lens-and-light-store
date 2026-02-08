@@ -76,7 +76,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="max-w-[1280px] mx-auto px-6 py-10 animate-fade-in">
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-10 animate-fade-in">
       <Breadcrumbs items={breadcrumbs} />
 
       <div className="mb-8">
@@ -92,7 +92,7 @@ export default function CartPage() {
             <CartItem key={item.product.id} item={item} />
           ))}
 
-          <div className="bg-white dark:bg-gray-900 rounded-xl p-6 border border-gray-200 dark:border-gray-800">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl p-4 sm:p-6 border border-gray-200 dark:border-neutral-800">
             <h3 className="font-bold text-lg mb-4 text-slate-900 dark:text-white">
               Promo Code
             </h3>
@@ -116,7 +116,7 @@ export default function CartPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <input
                     type="text"
                     value={promoCode}
@@ -125,11 +125,11 @@ export default function CartPage() {
                       setPromoError('');
                     }}
                     placeholder="Enter promo code"
-                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+                    className="flex-1 px-4 py-2 border border-gray-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/20 transition-all duration-200"
                   />
                   <button
                     onClick={handleApplyPromo}
-                    className="bg-primary hover:bg-primary/90 text-white font-bold px-6 py-2 rounded-lg transition-all duration-200"
+                    className="bg-primary hover:bg-primary/90 text-white font-bold px-6 py-2 rounded-lg transition-all duration-200 w-full sm:w-auto"
                   >
                     Apply
                   </button>

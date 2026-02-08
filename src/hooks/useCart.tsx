@@ -22,53 +22,71 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [removedItems, setRemovedItems] = useState<string[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  useEffect(() => {
+  const [items, setItems] = useState<CartItem[]>(() => {
+    if (typeof window === 'undefined') return [];
+    
     const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        const parsedCart: CartItem[] = JSON.parse(savedCart);
-        
-        const validatedCart: CartItem[] = [];
-        const removed: string[] = [];
+    if (!savedCart) return [];
+    
+    try {
+      const parsedCart: CartItem[] = JSON.parse(savedCart);
+      
+      const validatedCart: CartItem[] = [];
 
-        parsedCart.forEach((item) => {
-          const currentProduct = getProductById(item.product.id);
+      parsedCart.forEach((item) => {
+        const currentProduct = getProductById(item.product.id);
+        
+        if (currentProduct && currentProduct.inStock && currentProduct.quantity > 0) {
+          const maxQuantity = Math.min(item.quantity, currentProduct.quantity);
           
-          if (currentProduct && currentProduct.inStock && currentProduct.quantity > 0) {
-            const maxQuantity = Math.min(item.quantity, currentProduct.quantity);
-            
-            validatedCart.push({
-              product: currentProduct,
-              quantity: maxQuantity,
-            });
-          } else {
-            removed.push(item.product.name);
-          }
-        });
-
-        setItems(validatedCart);
-        
-        if (removed.length > 0) {
-          setRemovedItems(removed);
-          setTimeout(() => setRemovedItems([]), 5000);
+          validatedCart.push({
+            product: currentProduct,
+            quantity: maxQuantity,
+          });
         }
-      } catch (error) {
-        console.error('Error loading cart:', error);
-        setItems([]);
-      }
+      });
+
+      return validatedCart;
+    } catch (error) {
+      console.error('Error loading cart:', error);
+      return [];
     }
-    setIsInitialized(true);
-  }, []);
+  });
+
+  const [removedItems, setRemovedItems] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    
+    const savedCart = localStorage.getItem('cart');
+    if (!savedCart) return [];
+    
+    try {
+      const parsedCart: CartItem[] = JSON.parse(savedCart);
+      const removed: string[] = [];
+
+      parsedCart.forEach((item) => {
+        const currentProduct = getProductById(item.product.id);
+        
+        if (!currentProduct || !currentProduct.inStock || currentProduct.quantity <= 0) {
+          removed.push(item.product.name);
+        }
+      });
+
+      return removed;
+    } catch {
+      return [];
+    }
+  });
 
   useEffect(() => {
-    if (isInitialized) {
-      localStorage.setItem('cart', JSON.stringify(items));
+    if (removedItems.length > 0) {
+      const timer = setTimeout(() => setRemovedItems([]), 5000);
+      return () => clearTimeout(timer);
     }
-  }, [items, isInitialized]);
+  }, [removedItems.length]);
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(items));
+  }, [items]);
 
   const addToCart = (product: Product, quantity: number = 1) => {
     const currentProduct = getProductById(product.id);

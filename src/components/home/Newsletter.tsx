@@ -28,6 +28,9 @@ export default function Newsletter() {
             Get exclusive deals, early access to new launches, and expert photography tips delivered
             weekly.
           </p>
+          <p className="text-yellow-400 text-sm font-bold mt-3">
+            (This is a demo project, don&apos;t add anything)
+          </p>
         </div>
 
         <div className="lg:w-1/2 w-full relative z-10">
