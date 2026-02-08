@@ -338,7 +338,3 @@ Built with modern web development best practices:
 - **Dark Mode** - System-aware theme with manual override
 - **Responsive Images** - Optimized image loading
 - **Code Splitting** - Automatic code splitting for optimal performance
-
----
-
-**Made with ❤️ for photographers everywhere**# lens-and-light-store
