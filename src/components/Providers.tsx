@@ -1,18 +1,21 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { CartProvider } from '@/hooks/useCart';
 import { ThemeProvider } from '@/hooks/useTheme';
 import { WishlistProvider } from '@/hooks/useWishlist';
+import { CartProvider } from '@/hooks/useCart';
+import { ToastProvider } from '@/hooks/useToast';
+import { ReactNode } from 'react';
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
-      <WishlistProvider>
-        <CartProvider>
-          {children}
-        </CartProvider>
-      </WishlistProvider>
+      <ToastProvider>
+        <WishlistProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </WishlistProvider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }

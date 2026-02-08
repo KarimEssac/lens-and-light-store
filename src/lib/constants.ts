@@ -79,6 +79,42 @@ export const CATEGORIES = [
   },
 ];
 
-export const TAX_RATE = 0.085;
+export const TAX_RATE = 0.02;
 export const FREE_SHIPPING_THRESHOLD = 499;
 export const SHIPPING_COST = 0;
+
+export interface PromoCode {
+  code: string;
+  discount: number;
+  type: 'percentage' | 'fixed';
+  description: string;
+  minPurchase?: number;
+}
+
+export const PROMO_CODES: PromoCode[] = [
+  {
+    code: 'WELCOME10',
+    discount: 10,
+    type: 'percentage',
+    description: '10% off your first order',
+  },
+  {
+    code: 'SAVE50',
+    discount: 50,
+    type: 'fixed',
+    description: '$50 off orders over $500',
+    minPurchase: 500,
+  },
+  {
+    code: 'SUMMER20',
+    discount: 20,
+    type: 'percentage',
+    description: '20% off summer sale',
+  },
+  {
+    code: 'FREESHIP',
+    discount: 0,
+    type: 'fixed',
+    description: 'Free shipping on all orders',
+  },
+];

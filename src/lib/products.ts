@@ -12,6 +12,7 @@ export const products: Product[] = [
     category: 'Cameras',
     description: 'Professional full-frame mirrorless camera with 50MP sensor',
     inStock: true,
+    quantity: 15,
     sku: 'CAM-ALPHA-Z1-001',
     badge: 'New Arrival',
     images: [
@@ -42,6 +43,7 @@ export const products: Product[] = [
     category: 'Cameras',
     description: 'High-resolution mirrorless camera with 8K video',
     inStock: true,
+    quantity: 8,
     sku: 'PH-90122-BLK',
   },
   {
@@ -55,6 +57,7 @@ export const products: Product[] = [
     category: 'Lenses',
     description: 'Professional L-Series prime lens',
     inStock: true,
+    quantity: 22,
     sku: 'LN-RF50-001',
   },
   {
@@ -68,6 +71,7 @@ export const products: Product[] = [
     category: 'Cameras',
     description: 'L-Mount • Full Frame • 24.2MP',
     inStock: true,
+    quantity: 12,
     sku: 'PH-90122-BLK',
   },
   {
@@ -81,6 +85,7 @@ export const products: Product[] = [
     category: 'Lenses',
     description: 'L-Mount • Wide Angle • Prime',
     inStock: true,
+    quantity: 18,
     sku: 'LN-3514-L',
   },
   {
@@ -94,6 +99,7 @@ export const products: Product[] = [
     category: 'Accessories',
     description: 'Black • Quick Release • Adjustable',
     inStock: true,
+    quantity: 45,
     sku: 'AC-SLD-BK',
   },
   {
@@ -108,6 +114,7 @@ export const products: Product[] = [
     category: 'Lighting',
     description: 'Dual Strobe + Softbox',
     inStock: true,
+    quantity: 7,
     sku: 'LT-STD-001',
     badge: 'Save $50',
   },
@@ -122,6 +129,7 @@ export const products: Product[] = [
     category: 'Accessories',
     description: 'Weatherproof Messenger',
     inStock: true,
+    quantity: 30,
     sku: 'BAG-EXP-CAN',
   },
 ];

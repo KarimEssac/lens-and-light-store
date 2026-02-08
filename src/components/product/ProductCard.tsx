@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
 import { useWishlist } from '@/hooks/useWishlist';
+import { useToast } from '@/hooks/useToast';
 
 interface ProductCardProps {
   product: Product;
@@ -12,12 +13,14 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { showToast } = useToast();
   const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart(product, 1);
+    showToast('Added to Cart!', 'cart', product.name);
   };
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
@@ -25,8 +28,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     if (inWishlist) {
       removeFromWishlist(product.id);
+      showToast('Removed from Wishlist', 'info', product.name);
     } else {
       addToWishlist(product);
+      showToast('Added to Wishlist!', 'wishlist', product.name);
     }
   };
 

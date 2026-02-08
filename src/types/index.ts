@@ -10,6 +10,7 @@ export interface Product {
   category: string;
   description: string;
   inStock: boolean;
+  quantity: number;
   sku: string;
   badge?: string;
   images?: string[];
@@ -22,7 +23,6 @@ export interface Specification {
   value: string;
 }
 
-// Cart Types
 export interface CartItem {
   product: Product;
   quantity: number;
@@ -48,7 +48,6 @@ export interface FilterGroup {
   options: FilterOption[];
 }
 
-// Checkout Types
 export interface ShippingAddress {
   fullName: string;
   address1: string;
@@ -106,4 +105,12 @@ export type Theme = 'light' | 'dark';
 export interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
+}
+
+export interface PromoCode {
+  code: string;
+  discount: number;
+  type: 'percentage' | 'fixed';
+  description: string;
+  minPurchase?: number;
 }

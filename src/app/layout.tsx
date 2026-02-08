@@ -4,6 +4,9 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Providers from '@/components/Providers';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import PageTransition from '@/components/PageTransition';
+import RemovedItemsNotification from '@/components/RemovedItemsNotification';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -31,12 +34,16 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} font-sans bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen antialiased`}>
+        <LoadingSpinner />
         <Providers>
           <Header />
           <main className="min-h-screen">
-            {children}
+            <PageTransition>
+              {children}
+            </PageTransition>
           </main>
           <Footer />
+          <RemovedItemsNotification />
         </Providers>
       </body>
     </html>

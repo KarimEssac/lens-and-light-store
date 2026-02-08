@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
 import { useWishlist } from '@/hooks/useWishlist';
+import { useToast } from '@/hooks/useToast';
 
 interface ProductInfoProps {
   product: Product;
@@ -13,20 +14,21 @@ export default function ProductInfo({ product }: ProductInfoProps) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const [showSuccess, setShowSuccess] = useState(false);
+  const { showToast } = useToast();
   const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    showToast('Added to Cart!', 'cart', `${quantity}x ${product.name}`);
   };
 
   const handleWishlistToggle = () => {
     if (inWishlist) {
       removeFromWishlist(product.id);
+      showToast('Removed from Wishlist', 'info', product.name);
     } else {
       addToWishlist(product);
+      showToast('Added to Wishlist!', 'wishlist', product.name);
     }
   };
 
@@ -61,13 +63,6 @@ export default function ProductInfo({ product }: ProductInfoProps) {
 
   return (
     <div className="space-y-6">
-      {showSuccess && (
-        <div className="bg-green-100 dark:bg-green-900/30 border border-green-300 dark:border-green-700 text-green-800 dark:text-green-300 px-4 py-3 rounded-lg flex items-center gap-2 animate-fade-in">
-          <span className="material-symbols-outlined">check_circle</span>
-          <span className="font-semibold">Added to cart!</span>
-        </div>
-      )}
-
       <div>
         {product.badge && (
           <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full mb-3">

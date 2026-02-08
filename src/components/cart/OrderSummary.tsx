@@ -1,24 +1,37 @@
 'use client';
 
 import Link from 'next/link';
-import { CartItem } from '@/types';
-import { TAX_RATE, SHIPPING_COST } from '@/lib/constants';
+import { CartItem, PromoCode } from '@/types';
+import { TAX_RATE, SHIPPING_COST, FREE_SHIPPING_THRESHOLD } from '@/lib/constants';
 
 interface OrderSummaryProps {
   items: CartItem[];
+  appliedPromo?: PromoCode | null;
   showPromoCode?: boolean;
   showTrustBadges?: boolean;
 }
 
 export default function OrderSummary({ 
   items, 
-  showPromoCode = true,
+  appliedPromo,
+  showPromoCode = false,
   showTrustBadges = true 
 }: OrderSummaryProps) {
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const tax = subtotal * TAX_RATE;
-  const shipping = SHIPPING_COST;
-  const total = subtotal + tax + shipping;
+  
+  let promoDiscount = 0;
+  if (appliedPromo) {
+    if (appliedPromo.type === 'percentage') {
+      promoDiscount = subtotal * (appliedPromo.discount / 100);
+    } else {
+      promoDiscount = appliedPromo.discount;
+    }
+  }
+  
+  const subtotalAfterPromo = subtotal - promoDiscount;
+  const tax = subtotalAfterPromo * TAX_RATE;
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const total = subtotalAfterPromo + tax + shipping;
 
   return (
     <aside className="w-full lg:w-[380px] lg:sticky lg:top-24 space-y-6">
@@ -34,12 +47,37 @@ export default function OrderSummary({
               ${subtotal.toFixed(2)}
             </span>
           </div>
+
+          {appliedPromo && promoDiscount > 0 && (
+            <div className="flex justify-between text-sm">
+              <span className="text-green-600 dark:text-green-400">
+                Promo ({appliedPromo.code})
+              </span>
+              <span className="font-medium text-green-600 dark:text-green-400">
+                -${promoDiscount.toFixed(2)}
+              </span>
+            </div>
+          )}
+
           <div className="flex justify-between text-sm text-slate-500">
             <span>Estimated Shipping</span>
-            <span className="text-emerald-600 font-medium">Free</span>
+            {shipping === 0 ? (
+              <span className="text-emerald-600 font-medium">Free</span>
+            ) : (
+              <span className="font-medium text-slate-900 dark:text-slate-200">
+                ${shipping.toFixed(2)}
+              </span>
+            )}
           </div>
+
+          {subtotal < FREE_SHIPPING_THRESHOLD && FREE_SHIPPING_THRESHOLD - subtotal > 0 && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-xs text-blue-700 dark:text-blue-400">
+              Add <span className="font-bold">${(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)}</span> more for free shipping!
+            </div>
+          )}
+
           <div className="flex justify-between text-sm text-slate-500">
-            <span>Estimated Tax</span>
+            <span>Estimated Tax (2%)</span>
             <span className="font-medium text-slate-900 dark:text-slate-200">
               ${tax.toFixed(2)}
             </span>
@@ -54,30 +92,12 @@ export default function OrderSummary({
 
           <Link
             href="/checkout"
-            className="w-full py-4 bg-primary text-white rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-md active:scale-[0.98] mt-4"
+            className="w-full py-4 bg-primary text-white rounded-lg font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all duration-200 shadow-md active:scale-[0.98] mt-4"
           >
             Proceed to Checkout
             <span className="material-symbols-outlined">chevron_right</span>
           </Link>
         </div>
-
-        {showPromoCode && (
-          <div className="px-6 pb-6 pt-2">
-            <label className="block text-xs font-bold text-secondary-accent uppercase tracking-widest mb-3">
-              Promo Code
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg py-2 px-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary"
-                placeholder="Enter code"
-              />
-              <button className="px-4 py-2 border border-secondary-accent text-secondary-accent text-sm font-bold rounded-lg hover:bg-secondary-accent/10 transition-colors">
-                Apply
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {showTrustBadges && (
@@ -97,7 +117,7 @@ export default function OrderSummary({
               <p className="text-sm font-bold text-slate-900 dark:text-slate-200">
                 Fast Delivery
               </p>
-              <p className="text-xs text-slate-500">Free 2-day shipping on orders over $500</p>
+              <p className="text-xs text-slate-500">Free 2-day shipping on orders over $499</p>
             </div>
           </div>
         </div>
