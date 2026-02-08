@@ -11,12 +11,16 @@ A modern, fully responsive e-commerce platform for professional photography equi
 
 - ✅ **Fully Responsive Design** - Mobile-first approach with adaptive layouts
 - ✅ **Dark Mode Support** - Toggle between light and dark themes
+- ✅ **Toast Notifications** - Color-coded notifications for user actions (cart, wishlist, orders)
+- ✅ **Mobile Filter Modal** - Smooth sliding filter panel for mobile devices
 - ✅ **Server-Side Rendering** - Built with Next.js App Router for optimal performance
 - ✅ **TypeScript** - Full type safety throughout the application
 - ✅ **Modern UI/UX** - Clean, professional design with smooth animations
 - ✅ **Product Catalog** - Advanced filtering and sorting capabilities
-- ✅ **Shopping Cart** - Full cart management functionality
-- ✅ **Checkout Flow** - Multi-step checkout process
+- ✅ **Shopping Cart** - Full cart management with localStorage persistence
+- ✅ **Wishlist System** - Save favorite products for later
+- ✅ **Checkout Flow** - Multi-step checkout with shipping address management
+- ✅ **Payment Options** - Credit Card, PayPal, Apple Pay, Cash on Delivery
 - ✅ **SEO Optimized** - Proper metadata and semantic HTML
 
 ## 🚀 Quick Start
@@ -67,6 +71,12 @@ lens-and-light-store/
 │   │   ├── cart/              # Cart components
 │   │   └── checkout/          # Checkout components
 │   │
+│   ├── hooks/                 # Custom React hooks
+│   │   ├── useCart.tsx        # Shopping cart management
+│   │   ├── useWishlist.tsx    # Wishlist management
+│   │   ├── useTheme.tsx       # Dark mode toggle
+│   │   └── useToast.tsx       # Toast notifications
+│   │
 │   ├── styles/                # CSS modules
 │   │   ├── colors.css         # Color variables
 │   │   ├── typography.css     # Typography styles
@@ -98,15 +108,44 @@ lens-and-light-store/
 - **Font Family**: Inter (Google Fonts)
 - **Weights**: 300, 400, 500, 600, 700, 800, 900
 
+## 🔄 State Management
+
+### Context Providers
+- **ThemeProvider** - Light/dark mode with localStorage persistence
+- **ToastProvider** - Global toast notification system
+- **WishlistProvider** - Wishlist management with localStorage
+- **CartProvider** - Shopping cart with localStorage and stock validation
+
+### localStorage Keys
+- `theme` - User's theme preference (light/dark)
+- `cart` - Shopping cart items with quantities
+- `wishlist` - Saved products
+- `shippingAddress` - User's shipping address for checkout
+
+### Toast Notification Types
+- **Cart** (Blue) - Add to cart confirmations
+- **Wishlist** (Pink) - Wishlist add/remove notifications
+- **Success** (Green) - Order success, general success messages
+- **Error** (Red) - Error messages
+- **Info** (Gray) - General information, item removals
+
 ## 📄 Available Pages
 
 | Route | Description |
 |-------|-------------|
 | `/` | Home page with hero, featured products, and categories |
-| `/catalog` | Product catalog with filters and sorting |
-| `/product/[id]` | Individual product details page |
-| `/cart` | Shopping cart overview |
-| `/checkout` | Secure checkout process |
+| `/catalog` | Product catalog with filters, sorting, and mobile filter modal |
+| `/product/[id]` | Individual product details with add to cart/wishlist |
+| `/cart` | Shopping cart overview with quantity management |
+| `/checkout` | Checkout with shipping address and payment methods |
+| `/wishlist` | Saved products for later purchase |
+| `/privacy` | Privacy policy page |
+| `/terms` | Terms of service page |
+| `/refund-policy` | Refund and return policy |
+| `/support` | Customer support and FAQ |
+| `/track` | Order tracking page |
+| `/returns` | Returns management page |
+| `/stores` | Store locator page |
 
 ## 🛠️ Built With
 
@@ -114,7 +153,10 @@ lens-and-light-store/
 - **[React](https://react.dev/)** - UI library
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[@tailwindcss/forms](https://github.com/tailwindlabs/tailwindcss-forms)** - Form styling plugin
 - **[Material Symbols](https://fonts.google.com/icons)** - Icon library
+- **React Context API** - State management
+- **localStorage API** - Client-side data persistence
 
 ## 📱 Responsive Breakpoints
 
@@ -122,6 +164,24 @@ lens-and-light-store/
 - **Tablet**: 640px - 1024px
 - **Desktop**: 1024px - 1280px
 - **Large Desktop**: > 1280px
+
+## ✨ Animations
+
+### Custom Tailwind Animations
+- `fade-in` - Smooth fade in effect
+- `fade-out` - Smooth fade out effect
+- `fade-in-up` - Fade in with upward motion
+- `slide-in-right` - Slide in from right (toasts)
+- `slide-in-left` - Slide in from left
+- `slide-up` - Slide up from bottom (mobile filter modal)
+- `scale-in` - Scale and fade in effect
+
+### Interactive Elements
+- Product card hover effects
+- Button hover states
+- Toast notification animations
+- Modal slide animations
+- Smooth page transitions
 
 ## 🔧 Scripts
 
@@ -145,6 +205,17 @@ npm run lint         # Run ESLint
 - Edge (latest)
 - Mobile browsers (iOS Safari, Chrome Mobile)
 
+## ⚠️ Demo Mode
+
+This is a **training and demonstration project**. The checkout process includes:
+- **No real payment processing** - All payment forms are for demonstration only
+- **Console logging** - Order data is logged to browser console for development
+- **localStorage persistence** - Cart and user data saved locally
+- **Demo warning banner** - Visible reminder on checkout page
+- **Training placeholder text** - All payment inputs clearly marked as demo
+
+**Do not enter real payment information.** This application is designed for educational purposes and portfolio demonstration.
+
 ## 📝 Key Features Breakdown
 
 ### Home Page
@@ -156,31 +227,50 @@ npm run lint         # Run ESLint
 
 ### Product Catalog
 - Advanced filtering (brand, price, etc.)
+- **Mobile filter modal** with smooth slide-up animation
 - Multiple sorting options
-- Grid/list view toggle
+- Responsive product cards with wishlist hearts
+- **Toast notifications** on add to cart/wishlist
 - Pagination
-- Responsive product cards
 
 ### Product Details
 - Image gallery with thumbnails
 - Full specifications
-- Add to cart functionality
+- Add to cart functionality with quantity selector
+- **Wishlist toggle** with instant feedback
+- **Toast notifications** on actions
 - Related products
-- Customer reviews section (UI ready)
+- Trust badges (warranty, shipping, returns)
+
+### Wishlist
+- Grid view of saved products
+- Add to cart directly from wishlist
+- Remove items with confirmation
+- **Toast notifications** on actions
+- Persistent storage with localStorage
 
 ### Shopping Cart
-- Quantity adjustment
+- Quantity adjustment with stock validation
 - Remove items
-- Order summary
+- Order summary with tax calculation
 - Promo code input
+- **Removed items notification** for out-of-stock products
 - Trust badges
+- Persistent storage with localStorage
 
 ### Checkout
 - Multi-step progress indicator
-- Shipping address form
-- Payment method selection
-- Order review
-- Security badges
+- **Editable shipping address** with localStorage persistence
+- **Multiple payment methods**:
+  - Credit/Debit Card
+  - PayPal
+  - Apple Pay
+  - Cash on Delivery (COD)
+- Order review with itemized pricing
+- **Demo mode warning** for training purposes
+- **Success toast** with order confirmation
+- **Console logging** of complete order data
+- Security badges (PCI, SSL)
 
 ## 🔐 Security Features
 
@@ -200,16 +290,18 @@ npm run lint         # Run ESLint
 
 ## 📈 Future Enhancements
 
-- [ ] User authentication
-- [ ] Payment gateway integration
-- [ ] Product reviews and ratings
-- [ ] Wishlist functionality
-- [ ] Order history
-- [ ] Real-time inventory
-- [ ] Advanced search
-- [ ] Product recommendations
+- [ ] User authentication and accounts
+- [ ] Real payment gateway integration
+- [ ] Product reviews and ratings system
+- [ ] Order history and tracking
+- [ ] Real-time inventory management
+- [ ] Advanced search with autocomplete
+- [ ] AI-powered product recommendations
 - [ ] Email notifications
 - [ ] Admin dashboard
+- [ ] Multi-currency support
+- [ ] Product comparison feature
+- [ ] Size guides and specifications filters
 
 ## 📞 Support
 
@@ -226,10 +318,26 @@ This project is for demonstration purposes.
 Built with modern web development best practices:
 - Component-based architecture
 - TypeScript for type safety
+- Custom React hooks for reusable logic
+- Context API for global state management
 - Responsive design patterns
+- Mobile-first approach
 - Accessibility considerations
 - SEO optimization
 - Clean code principles
+- localStorage for data persistence
+- Toast notification system
+- Smooth animations and transitions
+
+### Key Technical Features
+- **Server & Client Components** - Optimized rendering strategy
+- **Dynamic Routing** - File-based routing with Next.js App Router
+- **Form Validation** - Client-side validation for all forms
+- **Error Handling** - Graceful error states and user feedback
+- **Loading States** - Skeleton screens and loading indicators
+- **Dark Mode** - System-aware theme with manual override
+- **Responsive Images** - Optimized image loading
+- **Code Splitting** - Automatic code splitting for optimal performance
 
 ---
 
