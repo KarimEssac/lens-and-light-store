@@ -1,0 +1,85 @@
+.card {
+  @apply bg-white dark:bg-slate-900 border border-gray-100 dark:border-gray-800 rounded-xl shadow-sm;
+}
+
+.card-hover {
+  @apply transition-all duration-300 hover:shadow-xl;
+}
+
+.btn {
+  @apply font-bold rounded-lg transition-all duration-200 inline-flex items-center justify-center gap-2;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-primary text-white hover:bg-primary/90 focus:ring-primary/20;
+  @apply shadow-lg shadow-primary/20;
+}
+
+.btn-secondary {
+  @apply bg-white/10 backdrop-blur-md text-white hover:bg-white/20;
+}
+
+.btn-outline {
+  @apply border-2 border-primary text-primary hover:bg-primary/5;
+}
+
+.input {
+  @apply w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700;
+  @apply rounded-lg px-4 py-2 text-sm;
+  @apply focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all;
+}
+
+.badge {
+  @apply inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase rounded;
+}
+
+.badge-new {
+  @apply bg-primary text-white;
+}
+
+.badge-sale {
+  @apply bg-red-600 text-white;
+}
+
+.badge-stock {
+  @apply bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100;
+}
+
+.product-card {
+  @apply bg-white dark:bg-background-dark border border-gray-100 dark:border-gray-800;
+  @apply rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all flex flex-col;
+}
+
+.product-card-image {
+  @apply aspect-square relative overflow-hidden bg-gray-50 dark:bg-gray-900;
+}
+
+.product-card-image img {
+  @apply w-full h-full object-cover transition-transform duration-500 group-hover:scale-105;
+}
+
+.header {
+  @apply sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md;
+  @apply border-b border-slate-200 dark:border-slate-800;
+}
+
+.footer {
+  @apply bg-white dark:bg-background-dark border-t border-gray-200 dark:border-gray-800;
+}
+
+.skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-gradient {
+  background: linear-gradient(to right, rgba(38, 50, 56, 0.9) 0%, rgba(38, 50, 56, 0.4) 50%, rgba(38, 50, 56, 0) 100%);
+}
+
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/20;
+}
