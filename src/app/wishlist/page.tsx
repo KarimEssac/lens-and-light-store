@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useWishlist } from '@/hooks/useWishlist';
+import { useWishlist } from '@/hooks/useWishList';
 import { useCart } from '@/hooks/useCart';
 
 export default function WishlistPage() {

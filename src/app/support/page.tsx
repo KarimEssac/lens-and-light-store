@@ -81,7 +81,6 @@ export default function SupportPage() {
           Get answers to common questions or reach out to our support team.
         </p>
 
-        {/* Search */}
         <div className="mb-12">
           <div className="relative max-w-2xl">
             <input
@@ -95,7 +94,6 @@ export default function SupportPage() {
           </div>
         </div>
 
-        {/* Contact Methods */}
         <div className="mb-16">
           <h2 className="text-2xl font-bold mb-6">Contact Us</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -120,7 +118,6 @@ export default function SupportPage() {
           </div>
         </div>
 
-        {/* FAQs */}
         <div>
           <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
           <div className="space-y-3 max-w-3xl">
@@ -150,7 +147,6 @@ export default function SupportPage() {
           </div>
         </div>
 
-        {/* Popular Topics */}
         <div className="mt-16 bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-8 rounded-xl">
           <h2 className="text-2xl font-bold mb-4">Popular Help Topics</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

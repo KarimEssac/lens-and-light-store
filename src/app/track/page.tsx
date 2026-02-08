@@ -41,8 +41,6 @@ export default function TrackPage() {
   const handleTrack = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate API call
     setTimeout(() => {
       setTrackingData({
         orderNumber: orderNumber || 'ORD-2024-1234',
@@ -78,7 +76,6 @@ export default function TrackPage() {
           Enter your order details to track your shipment.
         </p>
 
-        {/* Tracking Form */}
         <div className="max-w-2xl mb-12">
           <form onSubmit={handleTrack} className="bg-white dark:bg-slate-800 p-8 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
             <div className="space-y-5">
@@ -131,10 +128,8 @@ export default function TrackPage() {
           </form>
         </div>
 
-        {/* Tracking Results */}
         {trackingData && (
           <div className="space-y-6">
-            {/* Order Summary */}
             <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
               <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
                 <div>
@@ -156,7 +151,6 @@ export default function TrackPage() {
                 </div>
               </div>
 
-              {/* Items */}
               <div className="border-t border-slate-200 dark:border-slate-700 pt-6">
                 <h3 className="font-semibold mb-4">Items in this shipment</h3>
                 <div className="space-y-3">
@@ -178,18 +172,15 @@ export default function TrackPage() {
               </div>
             </div>
 
-            {/* Timeline */}
             <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
               <h3 className="font-bold text-lg mb-6">Shipment Timeline</h3>
               <div className="space-y-6">
                 {trackingData.timeline.map((event: TimelineEvent, index: number) => (
                   <div key={index} className="relative flex gap-4">
-                    {/* Line */}
                     {index !== trackingData.timeline.length - 1 && (
                       <div className={`absolute left-4 top-10 w-0.5 h-full ${event.completed ? 'bg-primary' : 'bg-slate-200 dark:bg-slate-700'}`} />
                     )}
                     
-                    {/* Icon */}
                     <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                       event.current 
                         ? 'bg-primary ring-4 ring-primary/20' 
@@ -202,7 +193,6 @@ export default function TrackPage() {
                       )}
                     </div>
 
-                    {/* Content */}
                     <div className="flex-1 pb-6">
                       <h4 className={`font-bold mb-1 ${event.current ? 'text-primary' : event.completed ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                         {event.status}
@@ -216,7 +206,6 @@ export default function TrackPage() {
               </div>
             </div>
 
-            {/* Help */}
             <div className="bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-6 rounded-xl">
               <div className="flex items-start gap-4">
                 <span className="material-symbols-outlined text-primary text-3xl">help</span>

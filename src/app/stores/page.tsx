@@ -57,7 +57,6 @@ export default function StoresPage() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate search - in real app would call geolocation API
     alert(`Searching for stores near ${searchZip}...`);
   };
 
@@ -73,7 +72,6 @@ export default function StoresPage() {
           Visit us in person for expert advice, hands-on demos, and exclusive in-store offers.
         </p>
 
-        {/* Search */}
         <div className="mb-8 max-w-2xl">
           <form onSubmit={handleSearch} className="flex gap-3">
             <div className="flex-1 relative">
@@ -99,7 +97,6 @@ export default function StoresPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Store List */}
           <div className="lg:col-span-2 space-y-4">
             {stores.map((store) => (
               <div
@@ -138,7 +135,6 @@ export default function StoresPage() {
                   </div>
                 </div>
 
-                {/* Services */}
                 <div className="border-t border-slate-200 dark:border-slate-700 pt-4 mt-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">
                     Services Available
@@ -155,7 +151,6 @@ export default function StoresPage() {
                   </div>
                 </div>
 
-                {/* Actions */}
                 <div className="flex gap-3 mt-4">
                   <a
                     href={`https://maps.google.com/?q=${encodeURIComponent(store.address + ' ' + store.city)}`}
@@ -178,9 +173,7 @@ export default function StoresPage() {
             ))}
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Map Placeholder */}
             <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
               <div className="aspect-square bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
                 <div className="text-center">
@@ -190,7 +183,6 @@ export default function StoresPage() {
               </div>
             </div>
 
-            {/* Store Benefits */}
             <div className="bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-6 rounded-xl">
               <h3 className="font-bold text-lg mb-4">In-Store Benefits</h3>
               <div className="space-y-3 text-sm">
@@ -221,7 +213,6 @@ export default function StoresPage() {
               </div>
             </div>
 
-            {/* Workshop Promo */}
             <div className="bg-slate-900 dark:bg-slate-950 text-white p-6 rounded-xl">
               <span className="material-symbols-outlined text-4xl text-primary mb-3 block">school</span>
               <h4 className="font-bold text-lg mb-2">Free Workshops</h4>
@@ -233,7 +224,6 @@ export default function StoresPage() {
               </button>
             </div>
 
-            {/* Contact */}
             <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
               <h4 className="font-bold mb-3">Questions?</h4>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">

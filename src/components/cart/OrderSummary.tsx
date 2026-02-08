@@ -65,7 +65,7 @@ export default function OrderSummary({
               <span className="text-emerald-600 font-medium">Free</span>
             ) : (
               <span className="font-medium text-slate-900 dark:text-slate-200">
-                ${shipping.toFixed(2)}
+                ${(shipping as number).toFixed(2)}
               </span>
             )}
           </div>

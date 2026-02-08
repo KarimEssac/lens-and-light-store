@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { NAV_LINKS } from '@/lib/constants';
 import { useCart } from '@/hooks/useCart';
-import { useWishlist } from '@/hooks/useWishlist';
+import { useWishlist } from '@/hooks/useWishList';
 import { useTheme } from '@/hooks/useTheme';
 
 export default function Header() {

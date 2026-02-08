@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Product } from '@/types';
 import { useCart } from '@/hooks/useCart';
-import { useWishlist } from '@/hooks/useWishlist';
+import { useWishlist } from '@/hooks/useWishList';
 import { useToast } from '@/hooks/useToast';
 
 interface ProductInfoProps {

@@ -31,7 +31,7 @@ export default function ReturnsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStep(3); // Success step
+    setStep(3);
   };
 
   return (
@@ -47,7 +47,6 @@ export default function ReturnsPage() {
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-2">
             {step === 1 && (
               <div className="bg-white dark:bg-slate-800 p-8 rounded-xl border border-slate-200 dark:border-slate-700">
@@ -170,9 +169,7 @@ export default function ReturnsPage() {
             )}
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Return Policy */}
             <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
               <h3 className="font-bold text-lg mb-4">Return Policy</h3>
               <div className="space-y-4 text-sm">
@@ -207,7 +204,6 @@ export default function ReturnsPage() {
               </div>
             </div>
 
-            {/* Help */}
             <div className="bg-gradient-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 p-6 rounded-xl">
               <h4 className="font-bold mb-2">Need Help?</h4>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
@@ -222,7 +218,6 @@ export default function ReturnsPage() {
               </Link>
             </div>
 
-            {/* Exchange Option */}
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 p-6 rounded-xl">
               <span className="material-symbols-outlined text-blue-600 dark:text-blue-400 text-3xl mb-2 block">swap_horiz</span>
               <h4 className="font-bold mb-2">Want to Exchange?</h4>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useCart } from '@/hooks/useCart';
-import { useWishlist } from '@/hooks/useWishlist';
+import { useWishlist } from '@/hooks/useWishList';
 
 export default function RemovedItemsNotification() {
   const { removedItems: cartRemoved } = useCart();
