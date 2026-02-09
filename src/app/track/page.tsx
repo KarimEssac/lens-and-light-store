@@ -43,7 +43,7 @@ export default function TrackPage() {
     setLoading(true);
     setTimeout(() => {
       setTrackingData({
-        orderNumber: orderNumber || 'ORD-2024-1234',
+        orderNumber: orderNumber || 'ORD-2026-1234',
         status: 'In Transit',
         estimatedDelivery: 'Feb 12, 2026',
         carrier: 'FedEx',
@@ -87,7 +87,7 @@ export default function TrackPage() {
                   type="text"
                   value={orderNumber}
                   onChange={(e) => setOrderNumber(e.target.value)}
-                  placeholder="ORD-2024-XXXX"
+                  placeholder="ORD-2026-XXXX"
                   className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary"
                   required
                 />

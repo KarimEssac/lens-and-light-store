@@ -8,6 +8,7 @@ export interface Product {
   reviewCount: number;
   image: string;
   category: string;
+  categoryId?: number;
   description: string;
   inStock: boolean;
   quantity: number;
@@ -113,4 +114,12 @@ export interface PromoCode {
   type: 'percentage' | 'fixed';
   description: string;
   minPurchase?: number;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  image: string;
+  count: string;
 }

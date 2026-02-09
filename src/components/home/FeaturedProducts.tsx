@@ -2,9 +2,23 @@
 import { getFeaturedProducts } from '@/lib/products';
 import ProductCard from '@/components/product/ProductCard';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { Product } from '@/types';
 
 export default function FeaturedProducts() {
-  const products = getFeaturedProducts();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      const data = await getFeaturedProducts();
+      setProducts(data);
+      setLoading(false);
+    };
+
+    loadProducts();
+  }, []);
 
   return (
     <section className="px-6 py-12">
@@ -23,11 +37,19 @@ export default function FeaturedProducts() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-64 bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg"></div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </section>
   );
-} 
+}

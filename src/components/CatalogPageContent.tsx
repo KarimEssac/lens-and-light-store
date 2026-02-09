@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Breadcrumbs from '@/components/layout/Breadcrumbs';
 import FilterSidebar from '@/components/product/FilterSidebar';
 import ProductGrid from '@/components/product/ProductGrid';
-import { products, getProductsByCategory } from '@/lib/products';
+import { getAllProducts, getProductsByCategory, searchProducts } from '@/lib/products';
 import { Product } from '@/types';
 
 export default function CatalogPageContent() {
@@ -13,24 +13,34 @@ export default function CatalogPageContent() {
   const category = searchParams.get('category');
   const searchQuery = searchParams.get('search');
   
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedPriceRange, setSelectedPriceRange] = useState<string>('');
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
-  const filteredProducts = useMemo(() => {
-    let filtered = category 
-      ? getProductsByCategory(category.charAt(0).toUpperCase() + category.slice(1))
-      : products;
+  useEffect(() => {
+    const loadProducts = async () => {
+      setLoading(true);
+      let data: Product[] = [];
 
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(query) ||
-        p.brand.toLowerCase().includes(query) ||
-        p.category.toLowerCase().includes(query) ||
-        p.description?.toLowerCase().includes(query)
-      );
-    }
+      if (searchQuery) {
+        data = await searchProducts(searchQuery);
+      } else if (category) {
+        data = await getProductsByCategory(category);
+      } else {
+        data = await getAllProducts();
+      }
+
+      setProducts(data);
+      setLoading(false);
+    };
+
+    loadProducts();
+  }, [category, searchQuery]);
+
+  const filteredProducts = useMemo(() => {
+    let filtered = products;
 
     if (selectedBrands.length > 0) {
       filtered = filtered.filter(p => selectedBrands.includes(p.brand));
@@ -45,7 +55,7 @@ export default function CatalogPageContent() {
     }
 
     return filtered;
-  }, [category, searchQuery, selectedBrands, selectedPriceRange]);
+  }, [products, selectedBrands, selectedPriceRange]);
 
   const handleBrandChange = (brand: string) => {
     setSelectedBrands(prev => 
@@ -76,6 +86,20 @@ export default function CatalogPageContent() {
   ];
 
   const activeFiltersCount = selectedBrands.length + (selectedPriceRange ? 1 : 0);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+        <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 animate-pulse rounded mb-6"></div>
+        <div className="h-10 w-64 bg-gray-200 dark:bg-gray-700 animate-pulse rounded mb-8"></div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="h-80 bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6 animate-fade-in">
@@ -117,7 +141,7 @@ export default function CatalogPageContent() {
           onBrandChange={handleBrandChange}
           onPriceChange={handlePriceChange}
           onClearFilters={handleClearFilters}
-          allProducts={category ? getProductsByCategory(category.charAt(0).toUpperCase() + category.slice(1)) : products}
+          allProducts={products}
           isModalOpen={isFilterModalOpen}
           onCloseModal={() => setIsFilterModalOpen(false)}
         />

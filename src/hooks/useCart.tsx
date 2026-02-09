@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product } from '@/types';
-import { getProductById } from '@/lib/products';
 
 interface CartItem {
   product: Product;
@@ -30,52 +29,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     
     try {
       const parsedCart: CartItem[] = JSON.parse(savedCart);
-      
-      const validatedCart: CartItem[] = [];
-
-      parsedCart.forEach((item) => {
-        const currentProduct = getProductById(item.product.id);
-        
-        if (currentProduct && currentProduct.inStock && currentProduct.quantity > 0) {
-          const maxQuantity = Math.min(item.quantity, currentProduct.quantity);
-          
-          validatedCart.push({
-            product: currentProduct,
-            quantity: maxQuantity,
-          });
-        }
-      });
-
-      return validatedCart;
+      return parsedCart.filter(item => item.product.inStock && item.product.quantity > 0);
     } catch (error) {
       console.error('Error loading cart:', error);
       return [];
     }
   });
 
-  const [removedItems, setRemovedItems] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return [];
-    
-    const savedCart = localStorage.getItem('cart');
-    if (!savedCart) return [];
-    
-    try {
-      const parsedCart: CartItem[] = JSON.parse(savedCart);
-      const removed: string[] = [];
-
-      parsedCart.forEach((item) => {
-        const currentProduct = getProductById(item.product.id);
-        
-        if (!currentProduct || !currentProduct.inStock || currentProduct.quantity <= 0) {
-          removed.push(item.product.name);
-        }
-      });
-
-      return removed;
-    } catch {
-      return [];
-    }
-  });
+  const [removedItems, setRemovedItems] = useState<string[]>([]);
 
   useEffect(() => {
     if (removedItems.length > 0) {
@@ -89,9 +50,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addToCart = (product: Product, quantity: number = 1) => {
-    const currentProduct = getProductById(product.id);
-    
-    if (!currentProduct || !currentProduct.inStock || currentProduct.quantity <= 0) {
+    if (!product.inStock || product.quantity <= 0) {
       return;
     }
 
@@ -101,17 +60,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (existingItem) {
         const newQuantity = Math.min(
           existingItem.quantity + quantity,
-          currentProduct.quantity
+          product.quantity
         );
         
         return prevItems.map((item) =>
           item.product.id === product.id
-            ? { ...item, product: currentProduct, quantity: newQuantity }
+            ? { ...item, quantity: newQuantity }
             : item
         );
       } else {
-        const maxQuantity = Math.min(quantity, currentProduct.quantity);
-        return [...prevItems, { product: currentProduct, quantity: maxQuantity }];
+        const maxQuantity = Math.min(quantity, product.quantity);
+        return [...prevItems, { product, quantity: maxQuantity }];
       }
     });
   };
@@ -126,18 +85,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const currentProduct = getProductById(productId);
-    if (!currentProduct || !currentProduct.inStock) {
-      removeFromCart(productId);
-      return;
-    }
-
-    const maxQuantity = Math.min(quantity, currentProduct.quantity);
-    
     setItems((prevItems) =>
       prevItems.map((item) =>
         item.product.id === productId 
-          ? { ...item, product: currentProduct, quantity: maxQuantity } 
+          ? { ...item, quantity: Math.min(quantity, item.product.quantity) } 
           : item
       )
     );
