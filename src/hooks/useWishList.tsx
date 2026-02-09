@@ -16,56 +16,54 @@ interface WishlistContextType {
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<Product[]>(() => {
-    if (typeof window === 'undefined') return [];
-    
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (!savedWishlist) return [];
-    
-    try {
-      const parsedWishlist: Product[] = JSON.parse(savedWishlist);
+  const [items, setItems] = useState<Product[]>([]);
+  const [removedItems, setRemovedItems] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load wishlist from localStorage on mount
+  useEffect(() => {
+    const loadWishlist = async () => {
+      if (typeof window === 'undefined') {
+        setIsLoading(false);
+        return;
+      }
       
-      const validatedWishlist: Product[] = [];
-
-      parsedWishlist.forEach((savedProduct) => {
-        const currentProduct = getProductById(savedProduct.id);
+      const savedWishlist = localStorage.getItem('wishlist');
+      if (!savedWishlist) {
+        setIsLoading(false);
+        return;
+      }
+      
+      try {
+        const parsedWishlist: Product[] = JSON.parse(savedWishlist);
         
-        if (currentProduct && currentProduct.inStock && currentProduct.quantity > 0) {
-          validatedWishlist.push(currentProduct);
+        const validatedWishlist: Product[] = [];
+        const removed: string[] = [];
+
+        // Use for...of to properly handle async/await
+        for (const savedProduct of parsedWishlist) {
+          const currentProduct = await getProductById(savedProduct.id);
+          
+          if (currentProduct && currentProduct.inStock && currentProduct.quantity > 0) {
+            validatedWishlist.push(currentProduct);
+          } else if (savedProduct.name) {
+            removed.push(savedProduct.name);
+          }
         }
-      });
 
-      return validatedWishlist;
-    } catch (error) {
-      console.error('Error loading wishlist:', error);
-      return [];
-    }
-  });
+        setItems(validatedWishlist);
+        setRemovedItems(removed);
+      } catch (error) {
+        console.error('Error loading wishlist:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const [removedItems, setRemovedItems] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return [];
-    
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (!savedWishlist) return [];
-    
-    try {
-      const parsedWishlist: Product[] = JSON.parse(savedWishlist);
-      const removed: string[] = [];
+    loadWishlist();
+  }, []);
 
-      parsedWishlist.forEach((savedProduct) => {
-        const currentProduct = getProductById(savedProduct.id);
-        
-        if (!currentProduct || !currentProduct.inStock || currentProduct.quantity <= 0) {
-          removed.push(savedProduct.name);
-        }
-      });
-
-      return removed;
-    } catch {
-      return [];
-    }
-  });
-
+  // Auto-clear removed items notification after 5 seconds
   useEffect(() => {
     if (removedItems.length > 0) {
       const timer = setTimeout(() => setRemovedItems([]), 5000);
@@ -73,12 +71,15 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     }
   }, [removedItems.length]);
 
+  // Save to localStorage whenever items change (but not during initial load)
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(items));
-  }, [items]);
+    if (!isLoading) {
+      localStorage.setItem('wishlist', JSON.stringify(items));
+    }
+  }, [items, isLoading]);
 
-  const addToWishlist = (product: Product) => {
-    const currentProduct = getProductById(product.id);
+  const addToWishlist = async (product: Product) => {
+    const currentProduct = await getProductById(product.id);
     
     if (!currentProduct || !currentProduct.inStock || currentProduct.quantity <= 0) {
       return;
